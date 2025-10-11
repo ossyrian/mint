@@ -70,7 +70,7 @@ ROOT_URLCONF = "mint.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR.parent / "ui" / "dist"],
+        "DIRS": [BASE_DIR.parent / "mint-ui" / "dist"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -139,13 +139,16 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Additional directories for static files
 STATICFILES_DIRS = [
-    BASE_DIR.parent / "ui" / "dist",
+    BASE_DIR.parent / "mint-ui" / "dist",
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Custom User model
+AUTH_USER_MODEL = "api.User"
 
 # Django REST Framework
 REST_FRAMEWORK = {
@@ -177,6 +180,6 @@ DJANGO_VITE = {
         "dev_server_protocol": "http",
         "dev_server_host": os.getenv("VITE_DEV_SERVER_HOST", "localhost"),
         "dev_server_port": int(os.getenv("VITE_DEV_SERVER_PORT", "5173")),
-        "manifest_path": BASE_DIR.parent / "ui" / "dist" / ".vite" / "manifest.json",
+        "manifest_path": BASE_DIR.parent / "mint-ui" / "dist" / ".vite" / "manifest.json",
     }
 }

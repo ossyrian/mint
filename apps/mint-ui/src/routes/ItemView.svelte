@@ -26,7 +26,7 @@
   <div class="mb-4">
     <a
       use:link
-      href="/listings"
+      href="/mogul/listings"
       class="text-primary-500 hover:text-primary-400"
     >
       ← Back to Listings

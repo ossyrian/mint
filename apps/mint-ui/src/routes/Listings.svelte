@@ -26,7 +26,7 @@
 
   <div class="grid gap-4">
     {#each mockListings as listing}
-      <a use:link href="/item/{listing.id}" class="card card-hover p-6 flex justify-between items-center">
+      <a use:link href="/mogul/item/{listing.id}" class="card card-hover p-6 flex justify-between items-center">
         <div>
           <h3 class="h4 mb-1">{listing.name}</h3>
           <p class="text-surface-400">Seller: {listing.seller}</p>
