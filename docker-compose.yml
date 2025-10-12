@@ -42,12 +42,12 @@ services:
 
   frontend:
     build:
-      context: ./apps/ui
+      context: ./apps/mint-ui
       dockerfile: Dockerfile
     container_name: mint-frontend
     command: pnpm dev --host
     volumes:
-      - ./apps/ui:/app
+      - ./apps/mint-ui:/app
       - /app/node_modules
     ports:
       - "5173:5173"

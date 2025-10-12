@@ -1,6 +1,6 @@
 import uuid
+
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 
@@ -20,7 +20,10 @@ class SoftDeleteManager(models.Manager):
 
 
 class BaseModel(models.Model):
-    """Abstract base model with UUID, soft deletion, and timestamps."""
+    """
+    Base model implementing soft delete.
+    `uuid` is used as the lookup key in most REST API operations.
+    """
 
     uuid = models.UUIDField(
         default=uuid.uuid4,
@@ -33,7 +36,7 @@ class BaseModel(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
 
     objects = SoftDeleteManager()
-    all_objects = models.Manager()  # Access all records including deleted
+    all_objects = models.Manager()
 
     class Meta:
         abstract = True
@@ -51,51 +54,3 @@ class BaseModel(models.Model):
         """Restore a soft-deleted record."""
         self.deleted_at = None
         self.save()
-
-
-class User(AbstractUser, BaseModel):
-    """Custom User model with UUID for public identification."""
-
-    guild = models.ForeignKey(
-        'Guild',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='members',
-    )
-
-    def __str__(self):
-        return self.username
-
-
-class Guild(BaseModel):
-    """Guild model for MintyHQ guild registry."""
-
-    name = models.CharField(max_length=200, unique=True)
-    description = models.TextField(blank=True)
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='owned_guilds',
-    )
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.name
-
-
-class Item(BaseModel):
-    """Example model for a marketplace item."""
-
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=12, decimal_places=0)
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='items')
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.name
