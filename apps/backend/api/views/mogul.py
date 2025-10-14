@@ -1,20 +1,21 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets
 
 from api.models import MarketplaceItem
-from api.serializers import get_item_serializer
+from api.serializers.v1 import MarketplaceItemSerializerV1
 
 
+@extend_schema_view(
+    list=extend_schema(tags=["MintyMogul"]),
+    retrieve=extend_schema(tags=["MintyMogul"]),
+    create=extend_schema(tags=["MintyMogul"]),
+    update=extend_schema(tags=["MintyMogul"]),
+    partial_update=extend_schema(tags=["MintyMogul"]),
+    destroy=extend_schema(tags=["MintyMogul"]),
+)
 class MarketplaceItemViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for items. Version-agnostic view.
-    """
+    """API endpoint for marketplace items."""
 
     queryset = MarketplaceItem.objects.all()
+    serializer_class = MarketplaceItemSerializerV1
     lookup_field = "uuid"
-
-    def get_serializer_class(self):
-        """
-        Return the appropriate serializer based on API version.
-        """
-        version = self.request.version or "v1"
-        return get_item_serializer(version)

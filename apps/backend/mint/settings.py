@@ -173,6 +173,24 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "MapleStory auction house API",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "TAGS": [
+        {
+            "name": "MintyDB",
+            "description": "Game Database API - Endpoints serving MapleStory game data including classes, jobs, skills, items, mobs, NPCs, quests, and more.",
+        },
+        {
+            "name": "MintyMogul",
+            "description": "Marketplace API - Mint's community-driven marketplace and auction house.",
+        },
+        {
+            "name": "Users",
+            "description": "User account management and profiles.",
+        },
+        {
+            "name": "MintyHQ",
+            "description": "Guilds API - Mint's community-driven guild registry.",
+        },
+    ],
 }
 
 # Django Vite

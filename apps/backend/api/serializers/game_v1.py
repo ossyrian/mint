@@ -1,42 +1,39 @@
 """Game data serializers for API v1."""
-from rest_flex_fields import FlexFieldsModelSerializer
-
 from api.models.game.characters import Job, MapleClass, Skill
-from api.models.game.crafting import CraftingIngredient, CraftingRecipe
-from api.models.game.items import Item, ItemDrop
-from api.models.game.mobs import Mob, MobSpawn
-from api.models.game.npcs import NPC, NPCLocation, NPCShopItem
-from api.models.game.quests import Quest, QuestReward
+from api.models.game.crafting import CraftingRecipe
+from api.models.game.items import Item
+from api.models.game.mobs import Mob
+from api.models.game.npcs import NPC
+from api.models.game.quests import Quest
 from api.models.game.world import Continent, Map, Region
+from api.serializers.base import BaseModelSerializer
 
 
-class MapleClassSerializer(FlexFieldsModelSerializer):
+class MapleClassSerializer(BaseModelSerializer):
     class Meta:
         model = MapleClass
-        fields = ["uuid", "source_id", "name", "description"]
+        fields = ["id", "source_id", "name", "description"]
 
 
-class JobSerializer(FlexFieldsModelSerializer):
+class JobSerializer(BaseModelSerializer):
     class Meta:
         model = Job
-        fields = ["uuid", "source_id", "name", "description", "maple_class"]
+        fields = ["id", "source_id", "name", "description", "maple_class"]
         expandable_fields = {"maple_class": (MapleClassSerializer, {"source": "maple_class"})}
 
 
-class SkillSerializer(FlexFieldsModelSerializer):
+class SkillSerializer(BaseModelSerializer):
     class Meta:
         model = Skill
-        fields = ["uuid", "source_id", "name", "description", "job"]
-        expandable_fields = {
-            "job": (JobSerializer, {"source": "job"}),
-        }
+        fields = ["id", "source_id", "name", "description", "job"]
+        expandable_fields = {"job": (JobSerializer, {"source": "job"})}
 
 
-class ItemSerializer(FlexFieldsModelSerializer):
+class ItemSerializer(BaseModelSerializer):
     class Meta:
         model = Item
         fields = [
-            "uuid",
+            "id",
             "source_id",
             "name",
             "description",
@@ -47,47 +44,43 @@ class ItemSerializer(FlexFieldsModelSerializer):
         ]
 
 
-class MobSerializer(FlexFieldsModelSerializer):
+class MobSerializer(BaseModelSerializer):
     class Meta:
         model = Mob
-        fields = ["uuid", "source_id", "name", "description", "hp", "mp", "exp", "mesos"]
+        fields = ["id", "source_id", "name", "description", "hp", "mp", "exp", "mesos"]
 
 
-class ContinentSerializer(FlexFieldsModelSerializer):
+class ContinentSerializer(BaseModelSerializer):
     class Meta:
         model = Continent
-        fields = ["uuid", "source_id", "name", "description"]
+        fields = ["id", "source_id", "name", "description"]
 
 
-class RegionSerializer(FlexFieldsModelSerializer):
+class RegionSerializer(BaseModelSerializer):
     class Meta:
         model = Region
-        fields = ["uuid", "source_id", "name", "description", "continent"]
-        expandable_fields = {
-            "continent": (ContinentSerializer, {"source": "continent"}),
-        }
+        fields = ["id", "source_id", "name", "description", "continent"]
+        expandable_fields = {"continent": (ContinentSerializer, {"source": "continent"})}
 
 
-class MapSerializer(FlexFieldsModelSerializer):
+class MapSerializer(BaseModelSerializer):
     class Meta:
         model = Map
-        fields = ["uuid", "source_id", "name", "description", "region"]
-        expandable_fields = {
-            "region": (RegionSerializer, {"source": "region"}),
-        }
+        fields = ["id", "source_id", "name", "description", "region"]
+        expandable_fields = {"region": (RegionSerializer, {"source": "region"})}
 
 
-class NPCSerializer(FlexFieldsModelSerializer):
+class NPCSerializer(BaseModelSerializer):
     class Meta:
         model = NPC
-        fields = ["uuid", "source_id", "name", "description"]
+        fields = ["id", "source_id", "name", "description"]
 
 
-class QuestSerializer(FlexFieldsModelSerializer):
+class QuestSerializer(BaseModelSerializer):
     class Meta:
         model = Quest
         fields = [
-            "uuid",
+            "id",
             "source_id",
             "name",
             "description",
@@ -112,11 +105,11 @@ class QuestSerializer(FlexFieldsModelSerializer):
         }
 
 
-class CraftingRecipeSerializer(FlexFieldsModelSerializer):
+class CraftingRecipeSerializer(BaseModelSerializer):
     class Meta:
         model = CraftingRecipe
         fields = [
-            "uuid",
+            "id",
             "source_id",
             "name",
             "description",

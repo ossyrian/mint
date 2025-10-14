@@ -1,22 +1,21 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets
 
 from api.models import User
-from api.serializers import (
-    get_user_serializer,
+from api.serializers.v1 import UserSerializerV1
+
+
+@extend_schema_view(
+    list=extend_schema(tags=["Users"]),
+    retrieve=extend_schema(tags=["Users"]),
+    create=extend_schema(tags=["Users"]),
+    update=extend_schema(tags=["Users"]),
+    partial_update=extend_schema(tags=["Users"]),
+    destroy=extend_schema(tags=["Users"]),
 )
-
-
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for users. Version-agnostic view.
-    """
+    """API endpoint for users."""
 
     queryset = User.objects.all()
+    serializer_class = UserSerializerV1
     lookup_field = "uuid"
-
-    def get_serializer_class(self):
-        """
-        Return the appropriate serializer based on API version.
-        """
-        version = self.request.version or "v1"
-        return get_user_serializer(version)
