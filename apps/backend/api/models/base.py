@@ -4,18 +4,28 @@ from django.db import models
 from django.utils import timezone
 
 
-class SoftDeleteManager(models.Manager):
-    """Manager that excludes soft-deleted records by default."""
+class SoftDeleteQuerySet(models.QuerySet):
+    def delete(self):
+        return self.update(deleted_at=timezone.now())
 
+    def hard_delete(self):
+        return super().delete()
+
+    def active(self):
+        return self.filter(deleted_at__isnull=True)
+
+    def deleted(self):
+        return self.filter(deleted_at__isnull=False)
+
+
+class SoftDeleteManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(deleted_at__isnull=True)
 
     def all_with_deleted(self):
-        """Return all records including soft-deleted ones."""
         return super().get_queryset()
 
     def deleted_only(self):
-        """Return only soft-deleted records."""
         return super().get_queryset().filter(deleted_at__isnull=False)
 
 

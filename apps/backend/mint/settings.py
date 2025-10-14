@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_vite",
     "simple_history",
+    "rest_flex_fields",
     # Local apps
     "api",
     "frontend",
@@ -181,6 +182,10 @@ DJANGO_VITE = {
         "dev_server_protocol": "http",
         "dev_server_host": os.getenv("VITE_DEV_SERVER_HOST", "localhost"),
         "dev_server_port": int(os.getenv("VITE_DEV_SERVER_PORT", "5173")),
-        "manifest_path": BASE_DIR.parent / "mint-ui" / "dist" / ".vite" / "manifest.json",
+        "manifest_path": BASE_DIR.parent
+        / "mint-ui"
+        / "dist"
+        / ".vite"
+        / "manifest.json",
     }
 }

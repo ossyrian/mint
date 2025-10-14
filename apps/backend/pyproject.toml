@@ -12,6 +12,7 @@ dependencies = [
   "psycopg2-binary>=2.9.11",
   "python-dotenv>=1.1.1",
   "django-simple-history>=3.7.0",
+  "drf-flex-fields>=1.0.2",
 ]
 
 [project.optional-dependencies]
