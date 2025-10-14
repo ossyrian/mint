@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.models import MarketplaceItem
 from api.serializers.v1 import MarketplaceItemSerializerV1
@@ -19,3 +20,7 @@ class MarketplaceItemViewSet(viewsets.ModelViewSet):
     queryset = MarketplaceItem.objects.all()
     serializer_class = MarketplaceItemSerializerV1
     lookup_field = "uuid"
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["name"]
+    filterset_fields = ["seller", "price"]
+    ordering_fields = ["name", "price", "created_at"]

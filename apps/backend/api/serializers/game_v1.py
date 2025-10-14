@@ -1,10 +1,12 @@
 """Game data serializers for API v1."""
+from rest_framework import serializers
+
 from api.models.game.characters import Job, MapleClass, Skill
-from api.models.game.crafting import CraftingRecipe
-from api.models.game.items import Item
-from api.models.game.mobs import Mob
-from api.models.game.npcs import NPC
-from api.models.game.quests import Quest
+from api.models.game.crafting import CraftingIngredient, CraftingRecipe
+from api.models.game.items import Item, ItemDrop
+from api.models.game.mobs import Mob, MobSpawn
+from api.models.game.npcs import NPC, NPCLocation, NPCShopItem
+from api.models.game.quests import Quest, QuestReward
 from api.models.game.world import Continent, Map, Region
 from api.serializers.base import BaseModelSerializer
 
@@ -110,9 +112,6 @@ class CraftingRecipeSerializer(BaseModelSerializer):
         model = CraftingRecipe
         fields = [
             "id",
-            "source_id",
-            "name",
-            "description",
             "result_item",
             "result_quantity",
             "meso_cost",
@@ -121,4 +120,64 @@ class CraftingRecipeSerializer(BaseModelSerializer):
         expandable_fields = {
             "result_item": (ItemSerializer, {"source": "result_item"}),
             "crafter_npc": (NPCSerializer, {"source": "crafter_npc"}),
+        }
+
+
+class ItemDropSerializer(BaseModelSerializer):
+    class Meta:
+        model = ItemDrop
+        fields = ["id", "item", "mob", "drop_rate"]
+        expandable_fields = {
+            "item": (ItemSerializer, {"source": "item"}),
+            "mob": (MobSerializer, {"source": "mob"}),
+        }
+
+
+class MobSpawnSerializer(BaseModelSerializer):
+    class Meta:
+        model = MobSpawn
+        fields = ["id", "mob", "map"]
+        expandable_fields = {
+            "mob": (MobSerializer, {"source": "mob"}),
+            "map": (MapSerializer, {"source": "map"}),
+        }
+
+
+class NPCLocationSerializer(BaseModelSerializer):
+    class Meta:
+        model = NPCLocation
+        fields = ["id", "npc", "map"]
+        expandable_fields = {
+            "npc": (NPCSerializer, {"source": "npc"}),
+            "map": (MapSerializer, {"source": "map"}),
+        }
+
+
+class NPCShopItemSerializer(BaseModelSerializer):
+    class Meta:
+        model = NPCShopItem
+        fields = ["id", "npc", "item", "price"]
+        expandable_fields = {
+            "npc": (NPCSerializer, {"source": "npc"}),
+            "item": (ItemSerializer, {"source": "item"}),
+        }
+
+
+class QuestRewardSerializer(BaseModelSerializer):
+    class Meta:
+        model = QuestReward
+        fields = ["id", "quest", "item", "quantity", "reward_group"]
+        expandable_fields = {
+            "quest": (QuestSerializer, {"source": "quest"}),
+            "item": (ItemSerializer, {"source": "item"}),
+        }
+
+
+class CraftingIngredientSerializer(BaseModelSerializer):
+    class Meta:
+        model = CraftingIngredient
+        fields = ["id", "recipe", "item", "quantity"]
+        expandable_fields = {
+            "recipe": (CraftingRecipeSerializer, {"source": "recipe"}),
+            "item": (ItemSerializer, {"source": "item"}),
         }

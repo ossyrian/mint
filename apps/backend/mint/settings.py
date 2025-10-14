@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party
     "rest_framework",
+    "django_filters",
     "drf_spectacular",
     "django_vite",
     "simple_history",
@@ -161,6 +162,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
     "DEFAULT_VERSION": "v1",
     "ALLOWED_VERSIONS": ["v1"],
@@ -170,7 +174,7 @@ REST_FRAMEWORK = {
 # drf-spectacular
 SPECTACULAR_SETTINGS = {
     "TITLE": "Mint API",
-    "DESCRIPTION": "MapleStory auction house API",
+    "DESCRIPTION": "REST API for Mint, a community-driven MapleStory hub",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "TAGS": [

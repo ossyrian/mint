@@ -50,6 +50,7 @@ class Item(BaseGameDataModel):
     class Meta:
         ordering = ["name"]
         indexes = [
+            models.Index(fields=["name"]),
             models.Index(fields=["slot", "category"]),
         ]
 
@@ -69,6 +70,9 @@ class ItemDrop(BaseModel):
     class Meta:
         unique_together = [["item", "mob"]]
         ordering = ["-drop_rate"]
+        indexes = [
+            models.Index(fields=["drop_rate"]),
+        ]
 
     def __str__(self):
         return f"{self.item.name} from {self.mob.name} ({self.drop_rate:.2%})"

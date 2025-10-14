@@ -14,6 +14,11 @@ class MarketplaceItem(BaseModel):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["price"]),
+            models.Index(fields=["created_at"]),
+        ]
 
     def __str__(self):
         return self.name

@@ -1,7 +1,6 @@
 from django.db import models
 
 from api.models.base import BaseModel, SoftDeleteManager, SoftDeleteQuerySet
-from api.models.game.base import BaseGameDataModel
 
 
 class CraftingRecipeQuerySet(SoftDeleteQuerySet):
@@ -20,7 +19,7 @@ class CraftingRecipeQuerySet(SoftDeleteQuerySet):
         )
 
 
-class CraftingRecipe(BaseGameDataModel):
+class CraftingRecipe(BaseModel):
     """
     Represents a crafting recipe in MapleStory.
     """
@@ -43,10 +42,14 @@ class CraftingRecipe(BaseGameDataModel):
     objects = SoftDeleteManager.from_queryset(CraftingRecipeQuerySet)()
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["result_item__name"]
+        indexes = [
+            models.Index(fields=["result_item", "crafter_npc"]),
+            models.Index(fields=["meso_cost"]),
+        ]
 
     def __str__(self):
-        return f"{self.name} -> {self.result_quantity}x {self.result_item.name}"
+        return f"{self.result_item.name} recipe ({self.uuid})"
 
 
 class CraftingIngredient(BaseModel):
@@ -64,4 +67,4 @@ class CraftingIngredient(BaseModel):
         ordering = ["item__name"]
 
     def __str__(self):
-        return f"{self.quantity}x {self.item.name} for {self.recipe.name}"
+        return f"{self.quantity}x {self.item.name} for {self.recipe}"

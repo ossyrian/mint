@@ -21,6 +21,9 @@ class Continent(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
@@ -47,6 +50,9 @@ class Region(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
@@ -84,6 +90,9 @@ class Map(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name

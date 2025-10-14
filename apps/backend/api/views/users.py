@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.models import User
 from api.serializers.v1 import UserSerializerV1
@@ -19,3 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializerV1
     lookup_field = "uuid"
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["username", "email"]
+    filterset_fields = ["guild"]
+    ordering_fields = ["username", "created_at"]

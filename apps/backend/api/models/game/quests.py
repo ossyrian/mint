@@ -66,6 +66,11 @@ class Quest(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["quest_line"]),
+            models.Index(fields=["required_level"]),
+        ]
 
     def __str__(self):
         return self.name
@@ -92,6 +97,10 @@ class QuestReward(BaseModel):
 
     def __str__(self):
         group_type = (
-            "guaranteed" if self.reward_group == 0 else f"choice group {self.reward_group}"
+            "guaranteed"
+            if self.reward_group == 0
+            else f"choice group {self.reward_group}"
         )
-        return f"{self.quantity}x {self.item.name} from {self.quest.name} ({group_type})"
+        return (
+            f"{self.quantity}x {self.item.name} from {self.quest.name} ({group_type})"
+        )

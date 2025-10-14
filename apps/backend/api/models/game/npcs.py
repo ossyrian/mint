@@ -29,6 +29,9 @@ class NPC(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
 
     def __str__(self):
         return self.name
@@ -63,6 +66,9 @@ class NPCShopItem(BaseModel):
         db_table = "game_npc_shop_item"
         unique_together = [["npc", "item"]]
         ordering = ["price"]
+        indexes = [
+            models.Index(fields=["price"]),
+        ]
 
     def __str__(self):
         return f"{self.item.name} sold by {self.npc.name} for {self.price:,} mesos"

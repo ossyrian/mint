@@ -37,6 +37,11 @@ class Mob(BaseGameDataModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["hp"]),
+            models.Index(fields=["exp"]),
+        ]
 
     def __str__(self):
         return self.name
