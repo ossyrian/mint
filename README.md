@@ -1,20 +1,24 @@
 # Mint
 
-A comprehensive MapleStory game database and community hub featuring game data browsing, marketplace functionality, and guild registry.
+A comprehensive MapleStory game database and community hub featuring game data browsing,
+marketplace functionality, and guild registry.
 
 ## Overview
 
 Mint is a full-stack web application built with Django that provides:
 
-- **MintyDB**: Complete game database with items, mobs, NPCs, quests, skills, and world maps
+- **MintyDB**: Complete game database with items, mobs, NPCs, quests, skills, and world
+  maps
 - **MintyMogul**: Marketplace for trading items (coming soon)
 - **MintyHQ**: Guild registry and management (coming soon)
 
-The application uses server-side rendering with Django templates, enhanced with HTMX for dynamic content and Alpine.js for interactive components.
+The application uses server-side rendering with Django templates, enhanced with HTMX for
+dynamic content and Alpine.js for interactive components.
 
 ## Tech Stack
 
 **Frontend:**
+
 - Django Templates
 - HTMX (dynamic content loading)
 - Alpine.js (interactive components)
@@ -23,12 +27,14 @@ The application uses server-side rendering with Django templates, enhanced with 
 - Vite 7 (asset bundling with HMR)
 
 **Backend:**
+
 - Django 5
 - Django REST Framework
 - drf-spectacular (OpenAPI docs)
 - PostgreSQL 17
 
 **Package Managers:**
+
 - `pnpm` (frontend assets)
 - `uv` (Python dependencies)
 
@@ -110,7 +116,8 @@ pnpm install
 pnpm dev
 ```
 
-Access the application at http://localhost:8000/ (Django serves the app, browser loads assets from Vite for HMR)
+Access the application at http://localhost:8000/ (Django serves the app, browser loads
+assets from Vite for HMR)
 
 ## Architecture
 
@@ -119,6 +126,7 @@ Access the application at http://localhost:8000/ (Django serves the app, browser
 Mint uses vertical slice architecture where each domain is a self-contained Django app:
 
 **Domain Apps (Complete Vertical Slices):**
+
 - **`common/`** - Shared utilities (BaseModel with UUID lookups and soft delete)
 - **`users/`** - User authentication and profiles
 - **`minty_db/`** - Game database (primary focus)
@@ -126,13 +134,16 @@ Mint uses vertical slice architecture where each domain is a self-contained Djan
 - **`minty_hq/`** - Guild registry (coming soon)
 
 **Presentation Layer:**
+
 - **`api/`** - REST API that imports models from all domain apps
 
-Each domain app contains its own models, views, templates, URLs, and admin configuration.
+Each domain app contains its own models, views, templates, URLs, and admin
+configuration.
 
 ### Django + HTMX + Alpine.js
 
 The application combines:
+
 - **Server-side rendering** for SEO-friendly pages and Discord previews
 - **HTMX** for partial page updates (search, pagination, filters)
 - **Alpine.js** for reactive components (dropdowns, modals, tabs)
@@ -141,6 +152,7 @@ The application combines:
 ### Django-Vite Integration
 
 Vite bundles CSS and JS assets while Django serves the application:
+
 - Vite dev server on port 5173 provides HMR
 - Django on port 8000 serves the main application
 - Browser loads assets directly from Vite for hot reloading
@@ -253,6 +265,7 @@ docker compose logs -f mint
 The REST API uses versioned URLs (`/api/v1/`) with full OpenAPI documentation:
 
 **Game Database (MintyDB):**
+
 - `/api/v1/db/items/` - Items
 - `/api/v1/db/mobs/` - Monsters
 - `/api/v1/db/classes/` - Character classes
@@ -266,6 +279,7 @@ The REST API uses versioned URLs (`/api/v1/`) with full OpenAPI documentation:
 - `/api/v1/db/recipes/` - Crafting recipes
 
 **Other Features:**
+
 - `/api/v1/users/` - User management
 - `/api/v1/mogul/items/` - Marketplace items
 - `/api/v1/guilds/` - Guild registry
@@ -290,7 +304,8 @@ When running the application:
 ## Key Features
 
 - **SEO-Friendly**: Server-side rendering with Open Graph tags for Discord previews
-- **Dynamic Content**: HTMX-powered search, pagination, and filtering without page reloads
+- **Dynamic Content**: HTMX-powered search, pagination, and filtering without page
+  reloads
 - **Interactive UI**: Alpine.js for dropdowns, modals, and tabs
 - **Secure APIs**: UUID-based endpoints instead of sequential integer IDs
 - **Soft Delete**: All models support soft delete with restore functionality
@@ -330,6 +345,7 @@ DB_PORT=5432
 ```
 
 **Important:**
+
 - Never commit `.env` files
 - Use `.env.example` as a template
 - SECRET_KEY is required (Django will raise ValueError if missing)

@@ -1,12 +1,16 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in
+this repository.
 
 ## Project Overview
 
-Mint is a comprehensive MapleStory game database and community hub. The codebase uses a monorepo structure with Django for both the REST API and server-rendered web application.
+Mint is a comprehensive MapleStory game database and community hub. The codebase uses a
+monorepo structure with Django for both the REST API and server-rendered web
+application.
 
 **Stack:**
+
 - Frontend: Django Templates + HTMX + Alpine.js + Tailwind CSS 4 + DaisyUI
 - Backend: Django 5 + Django REST Framework + drf-spectacular
 - Build Tools: Vite 7 (for CSS/JS bundling)
@@ -18,6 +22,7 @@ Mint is a comprehensive MapleStory game database and community hub. The codebase
 ### Running the Full Stack
 
 **Docker Compose (Recommended):**
+
 ```bash
 # Start all services (postgres, mint backend, frontend assets)
 docker compose up
@@ -30,6 +35,7 @@ docker compose down
 ```
 
 **Manual Development:**
+
 ```bash
 # Backend (from apps/mint/)
 uv run python manage.py runserver
@@ -81,25 +87,32 @@ pnpm preview
 
 ### Django + HTMX + Alpine.js Architecture
 
-The application uses server-side rendering with Django templates, enhanced with HTMX for dynamic content loading and Alpine.js for interactive components.
+The application uses server-side rendering with Django templates, enhanced with HTMX for
+dynamic content loading and Alpine.js for interactive components.
 
 **Key Concepts:**
+
 - **Server-Side Rendering**: Django generates full HTML pages
-- **HTMX**: Enables partial page updates without full reloads (search, pagination, filters)
+- **HTMX**: Enables partial page updates without full reloads (search, pagination,
+  filters)
 - **Alpine.js**: Provides reactive behavior for dropdowns, modals, tabs
 - **DaisyUI (CSS-only)**: Tailwind plugin for consistent component styling
 - **Django Templates**: All UI rendering happens server-side
 
 ### Django-Vite Integration
 
-Vite bundles CSS and JS assets (Tailwind, DaisyUI, HTMX, Alpine.js). Django serves the main application while Vite provides HMR in development.
+Vite bundles CSS and JS assets (Tailwind, DaisyUI, HTMX, Alpine.js). Django serves the
+main application while Vite provides HMR in development.
 
 **Key Configuration:**
+
 - `apps/mint/mint/settings.py` - DJANGO_VITE settings point to localhost:5173
-- `apps/static-src/vite.config.ts` - Builds main.js (HTMX + Alpine) and main.css (Tailwind + DaisyUI)
+- `apps/static-src/vite.config.ts` - Builds main.js (HTMX + Alpine) and main.css
+  (Tailwind + DaisyUI)
 - `apps/mint/templates/base.html` - Uses {% vite_asset 'src/main.js' %} template tag
 - `apps/static-src/src/main.css` - Uses Tailwind v4 CSS syntax with @source directives
-- Access everything at http://localhost:8000 (Vite dev server on 5173 is accessed by browser for HMR)
+- Access everything at http://localhost:8000 (Vite dev server on 5173 is accessed by
+  browser for HMR)
 
 **Do NOT add CORS configuration** - the browser accesses both servers on localhost.
 
@@ -107,39 +120,48 @@ Vite bundles CSS and JS assets (Tailwind, DaisyUI, HTMX, Alpine.js). Django serv
 
 The API uses URL path versioning (`/api/v1/`, `/api/v2/`, etc.):
 
-1. **URLs are versioned**: `apps/mint/mint/urls.py` includes version in path (`/api/<str:version>/`)
-2. **Views**: ViewSets in `apps/mint/api/views/` (game.py, users.py, guilds.py, mogul.py)
+1. **URLs are versioned**: `apps/mint/mint/urls.py` includes version in path
+   (`/api/<str:version>/`)
+2. **Views**: ViewSets in `apps/mint/api/views/` (game.py, users.py, guilds.py,
+   mogul.py)
 3. **Serializers**: Located in `apps/mint/api/serializers/` (v1.py, game_v1.py, base.py)
 4. **Router**: `apps/mint/api/urls.py` uses DRF DefaultRouter to register viewsets
 
 **To add a new API version:**
+
 1. Create new serializers in `apps/mint/api/serializers/v2.py`
 2. Add "v2" to ALLOWED_VERSIONS in settings.py
 3. Update views to use version-aware serializer selection if needed
 
 ### Vertical Slice Architecture
 
-Mint uses **Vertical Slice Architecture** where each domain app is a complete, self-contained feature:
+Mint uses **Vertical Slice Architecture** where each domain app is a complete,
+self-contained feature:
 
 **Domain Apps (Complete Vertical Slices):**
+
 - **`common/`** - Shared utilities (BaseModel with soft delete, SoftDeleteManager)
 - **`users/`** - User authentication and profiles (models, admin)
-- **`minty_db/`** - Game database (models, views, templates, URLs, admin) - primary focus
+- **`minty_db/`** - Game database (models, views, templates, URLs, admin) - primary
+  focus
 - **`minty_mogul/`** - Marketplace (models, views, templates, URLs, admin) - coming soon
 - **`minty_hq/`** - Guild registry (models, views, templates, URLs, admin) - coming soon
 
 **Presentation Layer (No Models):**
-- **`api/`** - REST API that imports models from all domain apps (views/, serializers/, urls.py)
+
+- **`api/`** - REST API that imports models from all domain apps (views/, serializers/,
+  urls.py)
 
 Each domain app contains:
+
 - `models/` or `models.py` - Database models (inherit from common.models.BaseModel)
 - `views.py` - Django views (HTML rendering with HTMX)
 - `templates/<app_name>/` - HTML templates
 - `urls.py` - URL routing
 - `admin.py` - Django admin configuration
 
-**BaseModel (common/models.py):**
-All models inherit from BaseModel which provides:
+**BaseModel (common/models.py):** All models inherit from BaseModel which provides:
+
 - `uuid` field (used as lookup key in REST APIs)
 - `created_at`, `updated_at` timestamps
 - Soft delete functionality (`deleted_at`, `delete()`, `hard_delete()`, `restore()`)
@@ -184,9 +206,11 @@ apps/static-src/
 
 ### Routing
 
-Routing is handled by Django URL patterns in `apps/mint/mint/urls.py` which includes domain app URLs:
+Routing is handled by Django URL patterns in `apps/mint/mint/urls.py` which includes
+domain app URLs:
 
 **Root URLs:**
+
 - `/` - Home page (game database focus)
 - `/db/` - MintyDB (game database) - includes to `minty_db.urls`
 - `/mogul/` - MintyMogul (marketplace) - includes to `minty_mogul.urls`
@@ -195,14 +219,15 @@ Routing is handled by Django URL patterns in `apps/mint/mint/urls.py` which incl
 - `/admin/` - Django admin
 
 **MintyDB URLs** (`minty_db/urls.py`):
+
 - `/db/` - Landing page
 - `/db/items/` - Items list
 - `/db/items/<uuid>/` - Item detail
 - `/db/mobs/`, `/db/classes/`, `/db/jobs/`, `/db/skills/` - Other resources
 - `/db/npcs/`, `/db/quests/`, `/db/maps/` - More resources
 
-**API URLs** (`api/urls.py`):
-Uses DRF DefaultRouter with these patterns:
+**API URLs** (`api/urls.py`): Uses DRF DefaultRouter with these patterns:
+
 - `/api/v1/users/` - User management
 - `/api/v1/mogul/items/` - Marketplace items
 - `/api/v1/guilds/` - Guild registry
@@ -216,6 +241,7 @@ All API viewsets use `lookup_field = "uuid"` for detail views.
 ## Environment Configuration
 
 **Root `.env`** (for Docker Compose):
+
 ```bash
 POSTGRES_DB=mint
 POSTGRES_USER=postgres
@@ -226,6 +252,7 @@ ALLOWED_HOSTS=localhost,127.0.0.1,mint
 ```
 
 **Backend `.env`** (for manual setup in `apps/mint/.env`):
+
 ```bash
 SECRET_KEY=<django-secret-key>
 DEBUG=True
@@ -238,18 +265,21 @@ DB_HOST=localhost
 DB_PORT=5432
 ```
 
-**IMPORTANT:** Backend requires SECRET_KEY environment variable - will raise ValueError if missing.
+**IMPORTANT:** Backend requires SECRET_KEY environment variable - will raise ValueError
+if missing.
 
 ## Access Points
 
 When running via Docker Compose or manual setup:
+
 - **Application**: http://localhost:8000/ (Django serves HTML + HTMX/Alpine)
 - **API**: http://localhost:8000/api/v1/
 - **API Docs**: http://localhost:8000/api/v1/docs/ (Swagger UI via drf-spectacular)
 - **OpenAPI Schema**: http://localhost:8000/api/v1/schema/
 - **Django Admin**: http://localhost:8000/admin/
 
-Note: The Vite dev server runs on port 5173 but assets are loaded by the browser directly from localhost:5173 for HMR. You access the app through localhost:8000.
+Note: The Vite dev server runs on port 5173 but assets are loaded by the browser
+directly from localhost:5173 for HMR. You access the app through localhost:8000.
 
 ## Important Notes
 
@@ -265,4 +295,5 @@ Note: The Vite dev server runs on port 5173 but assets are loaded by the browser
 - SEO-friendly with server-side rendering and Open Graph tags for Discord previews
 - All models inherit from `common.models.BaseModel` for UUID lookups and soft delete
 - API uses UUIDs instead of integer IDs (see `api/serializers/base.py`)
-- API viewsets tagged with "MintyDB", "MintyMogul", "MintyHQ", or "Users" for drf-spectacular docs
+- API viewsets tagged with "MintyDB", "MintyMogul", "MintyHQ", or "Users" for
+  drf-spectacular docs
