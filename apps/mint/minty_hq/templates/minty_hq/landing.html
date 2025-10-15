@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}MintyHQ - Guild Registry{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Hero Section -->
+  <div class="text-center mb-12">
+    <h1 class="h1 mb-4">MintyHQ</h1>
+    <p class="text-xl text-surface-400">
+      Your MapleStory guild registry and community hub
+    </p>
+  </div>
+
+  <!-- Coming Soon Message -->
+  <div class="max-w-4xl mx-auto">
+    <div class="card p-12 variant-ghost-primary text-center">
+      <div class="mb-8">
+        <svg class="w-24 h-24 mx-auto text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+      </div>
+      <h2 class="h2 mb-4">Coming Soon</h2>
+      <p class="text-lg text-surface-400 mb-8">
+        MintyHQ is currently under development. Soon you'll be able to:
+      </p>
+
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+        <div class="card p-6 variant-ghost-secondary">
+          <h3 class="h3 mb-2">Discover Guilds</h3>
+          <p class="text-surface-400">Browse and search for guilds that match your playstyle</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-tertiary">
+          <h3 class="h3 mb-2">Manage Rosters</h3>
+          <p class="text-surface-400">Keep track of your guild members and their progress</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-success">
+          <h3 class="h3 mb-2">Guild Ratings</h3>
+          <p class="text-surface-400">Fame and tag system for community feedback</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-warning">
+          <h3 class="h3 mb-2">Recruitment</h3>
+          <p class="text-surface-400">Post and find guild recruitment opportunities</p>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <a href="{% url 'home' %}" class="btn variant-filled-primary">
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

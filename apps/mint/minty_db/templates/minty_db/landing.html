@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}MintyDB - MapleStory Game Database{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Hero Section -->
+  <div class="text-center mb-12">
+    <h1 class="h1 mb-4">MintyDB</h1>
+    <p class="text-xl text-surface-400">
+      Your comprehensive MapleStory game database
+    </p>
+  </div>
+
+  <!-- Browse Categories -->
+  <div class="max-w-6xl mx-auto">
+    <h2 class="h2 mb-6">Browse Game Data</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Items Card -->
+      <a href="{% url 'minty_db:item_list' %}"
+        class="card p-6 variant-ghost-primary hover:variant-filled-primary transition-all">
+        <h3 class="h3 mb-2">Items</h3>
+        <p class="text-surface-400">Browse equipment, consumables, and more</p>
+      </a>
+
+      <button class="btn btn-primary">Test</button>
+
+      <!-- Mobs Card -->
+      <a href="{% url 'minty_db:mob_list' %}"
+        class="card p-6 variant-ghost-secondary hover:variant-filled-secondary transition-all">
+        <h3 class="h3 mb-2">Mobs</h3>
+        <p class="text-surface-400">Monsters and their drops</p>
+      </a>
+
+      <!-- NPCs Card -->
+      <a href="{% url 'minty_db:npc_list' %}"
+        class="card p-6 variant-ghost-tertiary hover:variant-filled-tertiary transition-all">
+        <h3 class="h3 mb-2">NPCs</h3>
+        <p class="text-surface-400">Quest givers and shop owners</p>
+      </a>
+
+      <!-- Quests Card -->
+      <a href="{% url 'minty_db:quest_list' %}"
+        class="card p-6 variant-ghost-success hover:variant-filled-success transition-all">
+        <h3 class="h3 mb-2">Quests</h3>
+        <p class="text-surface-400">Story missions and tasks</p>
+      </a>
+
+      <!-- Classes Card -->
+      <a href="{% url 'minty_db:class_list' %}"
+        class="card p-6 variant-ghost-warning hover:variant-filled-warning transition-all">
+        <h3 class="h3 mb-2">Classes</h3>
+        <p class="text-surface-400">Character class information</p>
+      </a>
+
+      <!-- Jobs Card -->
+      <a href="{% url 'minty_db:job_list' %}"
+        class="card p-6 variant-ghost-error hover:variant-filled-error transition-all">
+        <h3 class="h3 mb-2">Jobs</h3>
+        <p class="text-surface-400">Job advancement paths</p>
+      </a>
+
+      <!-- Skills Card -->
+      <a href="{% url 'minty_db:skill_list' %}"
+        class="card p-6 variant-ghost-primary hover:variant-filled-primary transition-all">
+        <h3 class="h3 mb-2">Skills</h3>
+        <p class="text-surface-400">Abilities and techniques</p>
+      </a>
+
+      <!-- Maps Card -->
+      <a href="{% url 'minty_db:map_list' %}"
+        class="card p-6 variant-ghost-secondary hover:variant-filled-secondary transition-all">
+        <h3 class="h3 mb-2">Maps</h3>
+        <p class="text-surface-400">World locations and areas</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="max-w-4xl mx-auto mt-16">
+    <div class="card p-8 variant-ghost-surface">
+      <h2 class="h2 mb-4">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="h3 mb-2 text-primary-500">Search</h3>
+          <p class="text-surface-400">Find items, mobs, and more with powerful search</p>
+        </div>
+        <div>
+          <h3 class="h3 mb-2 text-secondary-500">Filters</h3>
+          <p class="text-surface-400">Filter by type, level, and other attributes</p>
+        </div>
+        <div>
+          <h3 class="h3 mb-2 text-tertiary-500">Details</h3>
+          <p class="text-surface-400">Comprehensive information for every entry</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Mint - MapleStory Game Database{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="text-center mb-12">
+    <h1 class="h1 mb-4">Welcome to Mint</h1>
+    <p class="text-xl text-surface-400">
+      Your comprehensive MapleStory game database and community hub
+    </p>
+  </div>
+
+  <!-- MintyDB - Main Feature -->
+  <div class="max-w-6xl mx-auto mb-12">
+    <div class="card p-8 variant-ghost-primary">
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="h2 mb-2">MintyDB</h2>
+          <p class="text-surface-300 text-lg">
+            MapleStory Game Database
+          </p>
+        </div>
+        <a href="{% url 'minty_db:landing' %}" class="btn variant-filled-primary">
+          Browse All
+        </a>
+      </div>
+      <p class="text-surface-400 mb-6">
+        Explore comprehensive MapleStory game data including items, mobs, NPCs, quests, skills, and more. Your one-stop resource for all game information.
+      </p>
+
+      <!-- Quick Links Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="{% url 'minty_db:item_list' %}" class="btn variant-filled-primary w-full">
+          Items
+        </a>
+        <a href="{% url 'minty_db:mob_list' %}" class="btn variant-filled-primary w-full">
+          Mobs
+        </a>
+        <a href="{% url 'minty_db:npc_list' %}" class="btn variant-filled-primary w-full">
+          NPCs
+        </a>
+        <a href="{% url 'minty_db:quest_list' %}" class="btn variant-filled-primary w-full">
+          Quests
+        </a>
+        <a href="{% url 'minty_db:class_list' %}" class="btn variant-filled-primary w-full">
+          Classes
+        </a>
+        <a href="{% url 'minty_db:job_list' %}" class="btn variant-filled-primary w-full">
+          Jobs
+        </a>
+        <a href="{% url 'minty_db:skill_list' %}" class="btn variant-filled-primary w-full">
+          Skills
+        </a>
+        <a href="{% url 'minty_db:map_list' %}" class="btn variant-filled-primary w-full">
+          Maps
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coming Soon Features -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <!-- MintyMogul -->
+    <div class="card p-8 variant-ghost-secondary">
+      <div class="mb-6">
+        <h2 class="h2 mb-2">MintyMogul</h2>
+        <p class="text-surface-300 text-lg">
+          Auction House Marketplace
+        </p>
+      </div>
+      <p class="text-surface-400 mb-6">
+        Buy and sell items, equipment, and rare collectibles. Find the perfect gear for your character or turn your inventory into mesos.
+      </p>
+      <a href="{% url 'minty_mogul:landing' %}" class="btn variant-filled-secondary w-full">
+        Coming Soon
+      </a>
+    </div>
+
+    <!-- MintyHQ -->
+    <div class="card p-8 variant-ghost-tertiary">
+      <div class="mb-6">
+        <h2 class="h2 mb-2">MintyHQ</h2>
+        <p class="text-surface-300 text-lg">
+          Guild Registry
+        </p>
+      </div>
+      <p class="text-surface-400 mb-6">
+        Discover guilds, manage your guild roster, and connect with other players. Build your community in MapleStory.
+      </p>
+      <a href="{% url 'minty_hq:landing' %}" class="btn variant-filled-tertiary w-full">
+        Coming Soon
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

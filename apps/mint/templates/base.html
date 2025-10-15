@@ -1,0 +1,44 @@
+{% load django_vite %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Mint - MapleStory Game Database{% endblock %}</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="{% block description %}Your comprehensive MapleStory game database and community hub{% endblock %}">
+
+  <!-- Open Graph / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{% block og_title %}Mint - MapleStory Game Database{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Your comprehensive MapleStory game database and community hub{% endblock %}">
+  <meta property="og:site_name" content="Mint">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}Mint - MapleStory Game Database{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Your comprehensive MapleStory game database and community hub{% endblock %}">
+
+  {% vite_asset 'src/main.css' %}
+  {% vite_asset 'src/main.js' %}
+</head>
+<body class="min-h-screen bg-base-100">
+  <div class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="navbar bg-base-300 shadow-lg">
+      {% include 'components/nav.html' %}
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center bg-base-300 text-base-content p-4">
+      {% include 'components/footer.html' %}
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+/* Source Django templates - multiple paths for different build contexts */
+@source '../mint/**/templates/**/*.html'; /* Production/local builds */
+@source '/mint/**/templates/**/*.html';   /* Docker dev environment */

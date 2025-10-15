@@ -1,0 +1,72 @@
+from django.db import models
+
+from common.models import BaseModel, SoftDeleteManager, SoftDeleteQuerySet
+from minty_db.models.base import BaseGameDataModel
+from minty_db.models.world import Map
+
+
+class NPCQuerySet(SoftDeleteQuerySet):
+    def with_locations(self):
+        return self.prefetch_related("npclocation_set__map__region__continent")
+
+    def with_shop_items(self):
+        return self.prefetch_related("npcshopitem_set__item")
+
+
+class NPC(BaseGameDataModel):
+    """
+    Represents a MapleStory NPC.
+    """
+
+    appears_in = models.ManyToManyField(
+        Map, through="NPCLocation", related_name="npc_locations"
+    )
+    sells = models.ManyToManyField(
+        "Item", through="NPCShopItem", related_name="sold_by_npcs"
+    )
+
+    objects = SoftDeleteManager.from_queryset(NPCQuerySet)()
+
+    class Meta:
+        ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class NPCLocation(BaseModel):
+    """
+    Represents an NPC's location in the world.
+    """
+
+    npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
+    map = models.ForeignKey(Map, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = [["npc", "map"]]
+
+    def __str__(self):
+        return f"{self.npc.name} in {self.map.name}"
+
+
+class NPCShopItem(BaseModel):
+    """
+    Represents an item sold by an NPC with price.
+    """
+
+    npc = models.ForeignKey(NPC, on_delete=models.CASCADE)
+    item = models.ForeignKey("Item", on_delete=models.CASCADE)
+    price = models.IntegerField(help_text="Price in mesos")
+
+    class Meta:
+        unique_together = [["npc", "item"]]
+        ordering = ["price"]
+        indexes = [
+            models.Index(fields=["price"]),
+        ]
+
+    def __str__(self):
+        return f"{self.item.name} sold by {self.npc.name} for {self.price:,} mesos"

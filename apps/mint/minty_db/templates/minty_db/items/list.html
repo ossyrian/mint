@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Items - MintyDB | Mint{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="h1 mb-2">Items</h1>
+    <p class="text-surface-400">Browse MapleStory items</p>
+  </div>
+
+  <!-- Search Box -->
+  <div class="mb-8">
+    <input type="search" placeholder="Search items..." class="input w-full max-w-xl"
+      hx-get="{% url 'minty_db:item_list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#items-grid"
+      hx-include="[name='search']" />
+  </div>
+
+  <!-- Items Grid -->
+  <div id="items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for item in items %}
+    <a href="{% url 'db-item-detail' uuid=item.uuid %}"
+      class="card p-6 variant-ghost hover:variant-filled-primary transition-all">
+      <h3 class="h3 mb-2">{{ item.name }}</h3>
+      {% if item.category %}
+      <p class="text-surface-300 text-sm mb-2">{{ item.get_category_display }}</p>
+      {% endif %}
+      {% if item.description %}
+      <p class="text-surface-400 text-sm line-clamp-2">{{ item.description }}</p>
+      {% endif %}
+    </a>
+    {% empty %}
+    <div class="col-span-full text-center py-12">
+      <p class="text-surface-400 text-lg">No items found.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="mt-8 flex justify-center gap-2">
+    {% if page_obj.has_previous %}
+    <a href="?page=1" class="btn variant-filled-primary">First</a>
+    <a href="?page={{ page_obj.previous_page_number }}" class="btn variant-filled-primary">Previous</a>
+    {% endif %}
+
+    <span class="btn variant-ghost">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn variant-filled-primary">Next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn variant-filled-primary">Last</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

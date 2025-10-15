@@ -1,0 +1,30 @@
+<div class="container mx-auto">
+  <div class="flex-1">
+    <a href="{% url 'home' %}" class="btn btn-ghost text-xl">Mint</a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="{% url 'home' %}">Home</a></li>
+
+      <!-- Game Database Dropdown -->
+      <li>
+        <details>
+          <summary>MintyDB</summary>
+          <ul class="bg-base-300 rounded-t-none p-2 w-48 z-50">
+            <li><a href="{% url 'minty_db:item_list' %}">Items</a></li>
+            <li><a href="{% url 'minty_db:mob_list' %}">Mobs</a></li>
+            <li><a href="{% url 'minty_db:class_list' %}">Classes</a></li>
+            <li><a href="{% url 'minty_db:job_list' %}">Jobs</a></li>
+            <li><a href="{% url 'minty_db:skill_list' %}">Skills</a></li>
+            <li><a href="{% url 'minty_db:npc_list' %}">NPCs</a></li>
+            <li><a href="{% url 'minty_db:quest_list' %}">Quests</a></li>
+            <li><a href="{% url 'minty_db:map_list' %}">Maps</a></li>
+          </ul>
+        </details>
+      </li>
+
+      <li><a href="{% url 'minty_mogul:landing' %}">MintyMogul</a></li>
+      <li><a href="{% url 'minty_hq:landing' %}">MintyHQ</a></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}MintyMogul - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Hero Section -->
+  <div class="text-center mb-12">
+    <h1 class="h1 mb-4">MintyMogul</h1>
+    <p class="text-xl text-surface-400">
+      MapleStory auction house and marketplace
+    </p>
+  </div>
+
+  <!-- Coming Soon Message -->
+  <div class="max-w-4xl mx-auto">
+    <div class="card p-12 variant-ghost-secondary text-center">
+      <div class="mb-8">
+        <svg class="w-24 h-24 mx-auto text-secondary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+      </div>
+      <h2 class="h2 mb-4">Coming Soon</h2>
+      <p class="text-lg text-surface-400 mb-8">
+        MintyMogul is currently under development. Soon you'll be able to:
+      </p>
+
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+        <div class="card p-6 variant-ghost-primary">
+          <h3 class="h3 mb-2">Buy Items</h3>
+          <p class="text-surface-400">Browse and purchase equipment, scrolls, and collectibles</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-tertiary">
+          <h3 class="h3 mb-2">Sell Items</h3>
+          <p class="text-surface-400">List your items for sale and manage your listings</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-success">
+          <h3 class="h3 mb-2">Price Tracking</h3>
+          <p class="text-surface-400">Monitor market trends and historical pricing data</p>
+        </div>
+
+        <div class="card p-6 variant-ghost-warning">
+          <h3 class="h3 mb-2">Advanced Search</h3>
+          <p class="text-surface-400">Find exactly what you need with powerful filters</p>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <a href="{% url 'home' %}" class="btn variant-filled-secondary">
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

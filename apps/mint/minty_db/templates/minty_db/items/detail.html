@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.name }} - Items | Mint{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6">
+      <a href="{% url 'minty_db:item_list' %}" class="btn variant-filled-primary">
+        ← Back to Items
+      </a>
+    </div>
+
+    <!-- Item Details Card -->
+    <div class="card p-8 variant-ghost-primary mb-8">
+      <h1 class="h1 mb-4">{{ item.name }}</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h2 class="h3 mb-4">Details</h2>
+          <dl class="space-y-2">
+            {% if item.category %}
+            <div>
+              <dt class="text-surface-300 text-sm">Category</dt>
+              <dd class="text-surface-100">{{ item.get_category_display }}</dd>
+            </div>
+            {% endif %}
+            {% if item.slot %}
+            <div>
+              <dt class="text-surface-300 text-sm">Slot</dt>
+              <dd class="text-surface-100">{{ item.get_slot_display }}</dd>
+            </div>
+            {% endif %}
+            {% if item.subcategory %}
+            <div>
+              <dt class="text-surface-300 text-sm">Subcategory</dt>
+              <dd class="text-surface-100">{{ item.subcategory }}</dd>
+            </div>
+            {% endif %}
+          </dl>
+        </div>
+
+        {% if item.description %}
+        <div>
+          <h2 class="h3 mb-4">Description</h2>
+          <p class="text-surface-300">{{ item.description }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Related Data (to be added with HTMX) -->
+    <div class="space-y-6">
+      <div class="card p-6">
+        <h2 class="h2 mb-4">Dropped By</h2>
+        <p class="text-surface-400">Loading...</p>
+      </div>
+
+      <div class="card p-6">
+        <h2 class="h2 mb-4">Sold By</h2>
+        <p class="text-surface-400">Loading...</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
