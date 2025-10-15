@@ -16,14 +16,14 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
+  mint:
     build:
-      context: ./apps/backend
+      context: ./apps/mint
       dockerfile: Dockerfile
     container_name: mint-backend
     command: uv run python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./apps/backend:/app
+      - ./apps/mint:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -32,7 +32,7 @@ services:
     environment:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG:-True}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,backend}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,mint}
       DB_ENGINE: django.db.backends.postgresql
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${POSTGRES_USER}
@@ -42,12 +42,13 @@ services:
 
   frontend:
     build:
-      context: ./apps/mint-ui
+      context: ./apps/static-src
       dockerfile: Dockerfile
     container_name: mint-frontend
     command: pnpm dev --host
     volumes:
-      - ./apps/mint-ui:/app
+      - ./apps/static-src:/app
+      - ./apps/mint:/mint:ro
       - /app/node_modules
     ports:
       - "5173:5173"

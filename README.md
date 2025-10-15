@@ -1,35 +1,52 @@
 # Mint
 
-The new old MapleStory auction house
+A comprehensive MapleStory game database and community hub featuring game data browsing, marketplace functionality, and guild registry.
 
-## Stack
+## Overview
 
-- **Frontend**: Svelte 5 + Vite + Tailwind CSS + Skeleton UI
-- **Backend**: Django 5 + Django REST Framework + drf-spectacular
-- **Database**: PostgreSQL
-- **Package Management**: pnpm (frontend), uv (backend)
+Mint is a full-stack web application built with Django that provides:
 
-## Project Structure
+- **MintyDB**: Complete game database with items, mobs, NPCs, quests, skills, and world maps
+- **MintyMogul**: Marketplace for trading items (coming soon)
+- **MintyHQ**: Guild registry and management (coming soon)
 
-```
-mint/
-├── apps/
-│   ├── ui/          # Svelte frontend
-│   └── backend/     # Django backend
-│       ├── api/     # REST API app
-│       └── frontend/# Frontend serving app
-├── infra/           # Terraform infrastructure
-└── docker-compose.yml
-```
+The application uses server-side rendering with Django templates, enhanced with HTMX for dynamic content and Alpine.js for interactive components.
 
-## Development Setup
+## Tech Stack
+
+**Frontend:**
+- Django Templates
+- HTMX (dynamic content loading)
+- Alpine.js (interactive components)
+- Tailwind CSS 4
+- DaisyUI (component styling)
+- Vite 7 (asset bundling with HMR)
+
+**Backend:**
+- Django 5
+- Django REST Framework
+- drf-spectacular (OpenAPI docs)
+- PostgreSQL 17
+
+**Package Managers:**
+- `pnpm` (frontend assets)
+- `uv` (Python dependencies)
+
+## Quick Start
+
+### Prerequisites
+
+- Docker and Docker Compose (recommended)
+- OR: Python 3.11+, Node.js 20+, PostgreSQL 17, pnpm, uv
 
 ### Using Docker Compose (Recommended)
 
-1. **Configure environment**:
+1. **Clone and configure**:
    ```bash
+   git clone <repository-url>
+   cd mint
    cp .env.example .env
-   # Edit .env with your settings (generate a secure SECRET_KEY!)
+   # Edit .env and set secure passwords
    ```
 
 2. **Start all services**:
@@ -37,136 +54,310 @@ mint/
    docker compose up
    ```
 
-   This will start:
+   This starts:
    - PostgreSQL on port 5432
-   - Django backend on port 8000 (serves both API and frontend)
-   - Vite dev server on port 5173 (proxied through Django)
+   - Django backend on port 8000
+   - Vite dev server on port 5173 (accessed by browser for HMR)
 
 3. **Access the application**:
-   - Application: http://localhost:8000/ (serves frontend via django-vite)
-   - API: http://localhost:8000/api/v1/
+   - Application: http://localhost:8000/
    - API Docs: http://localhost:8000/api/v1/docs/
-   - Admin: http://localhost:8000/admin/
+   - Django Admin: http://localhost:8000/admin/
 
-   Note: The Vite dev server runs on port 5173 internally but is accessed through Django at port 8000 for same-host serving with HMR support.
-
-4. **Stop all services**:
+4. **Stop services**:
    ```bash
    docker compose down
    ```
 
-5. **Rebuild containers** (after dependency changes):
+5. **Rebuild after changes**:
    ```bash
    docker compose up --build
    ```
 
-### Manual Setup
+### Manual Development Setup
 
-Note: Manual setup requires running both backend and frontend servers. The frontend will be accessible at http://localhost:8000/ via django-vite integration.
+#### Backend Setup
 
-#### Backend
+```bash
+cd apps/mint
 
-1. **Install dependencies**:
-   ```bash
-   cd apps/backend
-   uv sync
-   ```
+# Create .env file with database credentials
+cp .env.example .env
+# Edit .env with your PostgreSQL settings
 
-2. **Configure environment**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your settings
-   ```
+# Install dependencies
+uv sync
 
-3. **Start PostgreSQL** (if not using Docker):
-   ```bash
-   brew services start postgresql
-   createdb mint
-   ```
+# Run migrations
+uv run python manage.py migrate
 
-4. **Run migrations**:
-   ```bash
-   uv run python manage.py migrate
-   ```
+# Create superuser
+uv run python manage.py createsuperuser
 
-5. **Create superuser** (optional):
-   ```bash
-   uv run python manage.py createsuperuser
-   ```
+# Start Django server
+uv run python manage.py runserver
+```
 
-6. **Start server**:
-   ```bash
-   uv run python manage.py runserver
-   ```
+#### Frontend Assets Setup
 
-   The Django server will serve the frontend at http://localhost:8000/
+```bash
+cd apps/static-src
 
-#### Frontend
+# Install dependencies
+pnpm install
 
-The frontend dev server must be running for HMR (hot module replacement) to work:
+# Start Vite dev server (HMR for CSS/JS)
+pnpm dev
+```
 
-1. **Install dependencies**:
-   ```bash
-   cd apps/ui
-   pnpm install
-   ```
+Access the application at http://localhost:8000/ (Django serves the app, browser loads assets from Vite for HMR)
 
-2. **Start dev server**:
-   ```bash
-   pnpm dev
-   ```
+## Architecture
 
-## API Versioning
+### Vertical Slice Architecture
 
-The API uses URL path versioning. All endpoints are versioned:
+Mint uses vertical slice architecture where each domain is a self-contained Django app:
 
-- `/api/v1/items/` - Item CRUD endpoints
-- `/api/v1/schema/` - OpenAPI schema
-- `/api/v1/docs/` - Swagger UI
+**Domain Apps (Complete Vertical Slices):**
+- **`common/`** - Shared utilities (BaseModel with UUID lookups and soft delete)
+- **`users/`** - User authentication and profiles
+- **`minty_db/`** - Game database (primary focus)
+- **`minty_mogul/`** - Marketplace (coming soon)
+- **`minty_hq/`** - Guild registry (coming soon)
 
-To add a new version, create a new serializer in `apps/backend/api/serializers/` and update the version mapping.
+**Presentation Layer:**
+- **`api/`** - REST API that imports models from all domain apps
 
-## Environment Variables
+Each domain app contains its own models, views, templates, URLs, and admin configuration.
 
-### For Docker Compose (root .env)
+### Django + HTMX + Alpine.js
+
+The application combines:
+- **Server-side rendering** for SEO-friendly pages and Discord previews
+- **HTMX** for partial page updates (search, pagination, filters)
+- **Alpine.js** for reactive components (dropdowns, modals, tabs)
+- **DaisyUI** for consistent component styling (card, btn, navbar, etc.)
+
+### Django-Vite Integration
+
+Vite bundles CSS and JS assets while Django serves the application:
+- Vite dev server on port 5173 provides HMR
+- Django on port 8000 serves the main application
+- Browser loads assets directly from Vite for hot reloading
+- Access everything through http://localhost:8000
+
+## Project Structure
+
+```
+mint/
+├── apps/
+│   ├── mint/                        # Django project
+│   │   ├── mint/                    # Project settings
+│   │   │   ├── settings.py
+│   │   │   └── urls.py
+│   │   ├── common/                  # Shared utilities
+│   │   │   └── models.py            # BaseModel (UUID, soft delete)
+│   │   ├── users/                   # User management
+│   │   ├── minty_db/                # Game database
+│   │   │   ├── models/
+│   │   │   │   ├── items.py
+│   │   │   │   ├── mobs.py
+│   │   │   │   ├── characters.py
+│   │   │   │   ├── npcs.py
+│   │   │   │   ├── quests.py
+│   │   │   │   ├── world.py
+│   │   │   │   └── crafting.py
+│   │   │   ├── templates/minty_db/
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   ├── minty_mogul/             # Marketplace
+│   │   ├── minty_hq/                # Guild registry
+│   │   ├── api/                     # REST API
+│   │   │   ├── views/
+│   │   │   ├── serializers/
+│   │   │   └── urls.py
+│   │   ├── templates/               # Base templates
+│   │   ├── manage.py
+│   │   └── pyproject.toml
+│   └── static-src/                  # Frontend assets
+│       ├── src/
+│       │   ├── main.js              # HTMX + Alpine.js
+│       │   └── main.css             # Tailwind + DaisyUI
+│       ├── package.json
+│       └── vite.config.ts
+├── docker-compose.yml
+├── .env.example
+├── CLAUDE.md                        # Project instructions for Claude Code
+└── README.md
+```
+
+## Development Commands
+
+### Backend Commands (from `apps/mint/`)
+
+```bash
+# Run Django server
+uv run python manage.py runserver
+
+# Database migrations
+uv run python manage.py makemigrations
+uv run python manage.py migrate
+
+# Create superuser
+uv run python manage.py createsuperuser
+
+# Django shell
+uv run python manage.py shell
+
+# Add Python dependency
+uv add <package>
+
+# Sync dependencies from pyproject.toml
+uv sync
+```
+
+### Frontend Asset Commands (from `apps/static-src/`)
+
+```bash
+# Development mode (HMR)
+pnpm dev
+
+# Production build
+pnpm build
+
+# Preview production build
+pnpm preview
+```
+
+### Docker Compose Commands
+
+```bash
+# Start all services
+docker compose up
+
+# Rebuild after dependency changes
+docker compose up --build
+
+# Stop all services
+docker compose down
+
+# View logs
+docker compose logs -f mint
+```
+
+## REST API
+
+### API Endpoints
+
+The REST API uses versioned URLs (`/api/v1/`) with full OpenAPI documentation:
+
+**Game Database (MintyDB):**
+- `/api/v1/db/items/` - Items
+- `/api/v1/db/mobs/` - Monsters
+- `/api/v1/db/classes/` - Character classes
+- `/api/v1/db/jobs/` - Job advancements
+- `/api/v1/db/skills/` - Skills
+- `/api/v1/db/npcs/` - NPCs
+- `/api/v1/db/quests/` - Quests
+- `/api/v1/db/continents/` - World continents
+- `/api/v1/db/regions/` - World regions
+- `/api/v1/db/maps/` - Maps
+- `/api/v1/db/recipes/` - Crafting recipes
+
+**Other Features:**
+- `/api/v1/users/` - User management
+- `/api/v1/mogul/items/` - Marketplace items
+- `/api/v1/guilds/` - Guild registry
+
+### API Documentation
+
+- **Swagger UI**: http://localhost:8000/api/v1/docs/
+- **OpenAPI Schema**: http://localhost:8000/api/v1/schema/
+
+All API endpoints use UUIDs for lookups instead of integer IDs for improved security.
+
+## Access Points
+
+When running the application:
+
+- **Main Application**: http://localhost:8000/
+- **MintyDB**: http://localhost:8000/db/
+- **API Documentation**: http://localhost:8000/api/v1/docs/
+- **OpenAPI Schema**: http://localhost:8000/api/v1/schema/
+- **Django Admin**: http://localhost:8000/admin/
+
+## Key Features
+
+- **SEO-Friendly**: Server-side rendering with Open Graph tags for Discord previews
+- **Dynamic Content**: HTMX-powered search, pagination, and filtering without page reloads
+- **Interactive UI**: Alpine.js for dropdowns, modals, and tabs
+- **Secure APIs**: UUID-based endpoints instead of sequential integer IDs
+- **Soft Delete**: All models support soft delete with restore functionality
+- **Versioned API**: URL path versioning with OpenAPI documentation
+- **Modern CSS**: Tailwind CSS 4 with DaisyUI component library
+- **Hot Reloading**: Vite provides instant CSS/JS updates during development
+
+## Environment Configuration
+
+### For Docker Compose (root `.env`)
 
 ```bash
 # PostgreSQL
 POSTGRES_DB=mint
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your-secure-password-here
+POSTGRES_PASSWORD=<secure-password>
 
 # Django
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=<django-secret-key>
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,backend
+ALLOWED_HOSTS=localhost,127.0.0.1,mint
 ```
 
-### For Manual Backend Setup (apps/backend/.env)
+### For Manual Backend Setup (`apps/mint/.env`)
 
 ```bash
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=<django-secret-key>
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
 
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=mint
 DB_USER=postgres
-DB_PASSWORD=your-password
+DB_PASSWORD=<password>
 DB_HOST=localhost
 DB_PORT=5432
 ```
 
+**Important:**
+- Never commit `.env` files
+- Use `.env.example` as a template
+- SECRET_KEY is required (Django will raise ValueError if missing)
+
 ## Database
 
-The application uses PostgreSQL. When using Docker Compose, the database is automatically created and configured.
+The application uses PostgreSQL 17. Key features:
 
-For manual setup:
-```bash
-createdb mint
-psql mint
-```
+- **BaseModel**: All models inherit from `common.models.BaseModel` which provides:
+  - UUID primary keys (used in API lookups)
+  - Automatic timestamps (`created_at`, `updated_at`)
+  - Soft delete functionality (`deleted_at`, `delete()`, `restore()`, `hard_delete()`)
+  - `SoftDeleteManager` that filters out deleted records by default
 
 ## Contributing
 
 This is a personal project, but suggestions are welcome!
+
+### Development Guidelines
+
+1. Create a new branch for your feature
+2. Follow vertical slice architecture (keep domain logic within apps)
+3. Use HTMX for dynamic content, Alpine.js for interactive components
+4. Inherit from `common.models.BaseModel` for all models
+5. Add API endpoints to `api/` app, not domain apps
+6. Use DaisyUI classes for consistent styling
+7. Write meaningful commit messages
+
+## License
+
+[Add license information]
